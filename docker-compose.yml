@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  sw-system-backend:
+    image: sw-system-backend
+    container_name: sw-system-backend
+    ports:
+      - 3000:3000
+    environment:
+      PORT: ${PORT}
+      HOST: ${HOST}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      USER: ${USER}
+      PASSWORD: ${PASSWORD}
+      DB_NAME: ${DB_NAME}
+
+#    environment:
+#      PORT: "3000"
+#      HOST: "localhost"
+#      DB_HOST: "host.docker.internal"
+#      DB_PORT: "5432"
+#      USER: "postgres"
+#      PASSWORD: "881030"
+#      DB_NAME: "test"

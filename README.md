@@ -4,6 +4,7 @@
 
 1. change **sample.env** to **.env**
 2. fill all environment variables in .env file
+3. make **sql/init.sql** has same db name in **.env** file to create db for api server
 
 then you can choose **Docker run** or **docker-compose up** to create a container.
 
@@ -30,7 +31,7 @@ docker stop sw-system-backend
 docker rm sw-system-backend
 ```
 
-> if you want to connect to local postgres server change environment variable **DB_HOST** to **host.docker.internal** in **.env** file
+[comment]: <> (> if you want to connect to local postgres server change environment variable **DB_HOST** to **host.docker.internal** in **.env** file)
 
 ##### Docker compose up:
 

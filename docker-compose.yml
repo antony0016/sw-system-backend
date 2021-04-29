@@ -4,7 +4,7 @@ services:
     image: sw-system-backend
     container_name: sw-system-backend
     ports:
-      - 3000:3000
+      - ${PORT}:${PORT}
     environment:
       PORT: ${PORT}
       HOST: ${HOST}
@@ -13,6 +13,23 @@ services:
       USER: ${USER}
       PASSWORD: ${PASSWORD}
       DB_NAME: ${DB_NAME}
+    depends_on:
+      - "postgres"
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${USER}
+      POSTGRES_PASSWORD: ${PASSWORD}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - ${DB_STORE_VOLUME}:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/10-init.sql
 
 #    environment:
 #      PORT: "3000"

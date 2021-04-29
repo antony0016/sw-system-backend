@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 	"os"
 	"strconv"
+	"time"
 )
 
 var DB *gorm.DB
@@ -16,7 +17,7 @@ func Init() {
 	if DB != nil {
 		return
 	}
-	Connect()
+	Connect(0)
 	core.AutoMigrate(DB)
 }
 
@@ -35,7 +36,7 @@ func DsnWithEnv() string {
 }
 
 //Connect the func connect to db
-func Connect() {
+func Connect(retryTime int) {
 	var (
 		err error
 	)
@@ -45,6 +46,13 @@ func Connect() {
 
 	// show connect error
 	if err != nil {
+		MaxRetryTimes, _ := strconv.Atoi(os.Getenv("DB_RECONNECT_RETRY_TIME"))
+		if retryTime < MaxRetryTimes {
+			fmt.Println("connect to database fail")
+			fmt.Println("retry to connect to database...")
+			time.Sleep(1 * time.Second)
+			Connect(retryTime + 1)
+		}
 		fmt.Println("connect to database fail")
 		fmt.Println(err)
 	}

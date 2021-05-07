@@ -7,7 +7,7 @@ import (
 
 func SetOrderRouter(router *gin.RouterGroup) {
 	router.GET("/orders", controller.AllOrder)
-	router.GET("/orders/:id", controller.OneOrder)
+	//router.GET("/orders/:id", controller.OneOrder)
 	router.POST("/orders", controller.CreateOrder)
 	router.PUT("/orders/:id", controller.UpdateOrder)
 	router.DELETE("/orders/:id", controller.DeleteOrder)

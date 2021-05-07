@@ -23,6 +23,8 @@ func CreateOrderItems(orderID uint, orderItems []model.OrderItem) error {
 	db := pgdb.DB
 	for _, orderItem := range orderItems {
 		orderItem.OrderID = orderID
+		orderItem.ItemID = orderItem.ID
+		orderItem.ID = 0
 		err = db.Save(&orderItem).Error
 		if err != nil {
 			return err
@@ -76,6 +78,7 @@ func AllOrder(c *gin.Context) {
 			"price":   order.Price,
 			"status":  order.Status,
 			"date":    order.Date,
+			"mileage": order.Mileage,
 			"items":   items,
 		})
 	}
@@ -84,18 +87,18 @@ func AllOrder(c *gin.Context) {
 	httpresponse.MakeResponse(c, response)
 }
 
-func OneOrder(c *gin.Context) {
-	var orders []model.Order
-	var response model.Response
-	db := pgdb.DB
-	orderID, _ := strconv.Atoi(c.Param("id"))
-	if err := db.First(&orders, orderID).Error; err != nil {
-		fmt.Println(err)
-		response.ErrorCode = http.StatusInternalServerError
-	}
-	response.Data = orders
-	httpresponse.MakeResponse(c, response)
-}
+//func OneOrder(c *gin.Context) {
+//	var orders []model.Order
+//	var response model.Response
+//	db := pgdb.DB
+//	orderID, _ := strconv.Atoi(c.Param("id"))
+//	if err := db.First(&orders, orderID).Error; err != nil {
+//		fmt.Println(err)
+//		response.ErrorCode = http.StatusInternalServerError
+//	}
+//	response.Data = orders
+//	httpresponse.MakeResponse(c, response)
+//}
 
 func CreateOrder(c *gin.Context) {
 	var items []model.OrderItem
@@ -104,13 +107,15 @@ func CreateOrder(c *gin.Context) {
 	userID, _ := strconv.Atoi(c.PostForm("user_id"))
 	price, _ := strconv.Atoi(c.PostForm("price"))
 	status, _ := strconv.Atoi(c.PostForm("status"))
+	mileage, _ := strconv.Atoi(c.PostForm("mileage"))
 	itemsJsonStr := c.PostForm("items")
 	_ = json.Unmarshal([]byte(itemsJsonStr), &items)
 	order := model.Order{
-		UserID: uint(userID),
-		Price:  price,
-		Status: status,
-		Date:   c.PostForm("date"),
+		UserID:  uint(userID),
+		Price:   price,
+		Status:  status,
+		Mileage: mileage,
+		Date:    c.PostForm("date"),
 	}
 	if err := db.Save(&order).Error; err != nil {
 		fmt.Println(err)

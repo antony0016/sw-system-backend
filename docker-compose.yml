@@ -30,12 +30,3 @@ services:
     volumes:
       - ${DB_STORE_VOLUME}:/var/lib/postgresql/data
       - ./sql/init.sql:/docker-entrypoint-initdb.d/10-init.sql
-
-#    environment:
-#      PORT: "3000"
-#      HOST: "localhost"
-#      DB_HOST: "host.docker.internal"
-#      DB_PORT: "5432"
-#      USER: "postgres"
-#      PASSWORD: "881030"
-#      DB_NAME: "test"
